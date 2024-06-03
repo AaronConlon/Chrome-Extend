@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/layooops/fsdx/main/schemas/config-schema.json",
+  "autogenerate": true,
+  "namingConvention": {
+    "file": "camelCase",
+    "folder": "camelCase",
+    "component": "pascalCase"
+  },
+  "globalSettings": {
+    "scriptingLanguage": "typescript",
+    "styles": {
+      "cssFramework": "standard",
+      "cssInJsFramework": "none",
+      "cssPreprocessor": "sass"
+    },
+    "framework": "react",
+    "testing": {
+      "enabled": false,
+      "testFilePostfix": "test"
+    },
+    "stateManagement": {
+      "type": "none"
+    },
+    "documentation": {
+      "enabled": false,
+      "documentTypes": []
+    }
+  }
+}
