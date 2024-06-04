@@ -18,9 +18,6 @@
       "@chrome-extend/chrome-extension-utils": [
         "packages/chrome-extension-utils/src/index.ts"
       ],
-      "@chrome-extend/chrome-extention-utils": [
-        "packages/chrome-extention-utils/src/index.ts"
-      ],
       "@chrome-extend/orders": ["libs/orders/src/index.ts"],
       "@chrome-extend/products": ["libs/products/src/index.ts"],
       "@chrome-extend/shared-ui": ["libs/shared/ui/src/index.ts"],
