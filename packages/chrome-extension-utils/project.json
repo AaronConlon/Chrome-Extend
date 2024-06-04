@@ -1,0 +1,9 @@
+{
+  "name": "chrome-extension-utils",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/chrome-extension-utils/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project chrome-extension-utils --web",
+  "targets": {}
+}
