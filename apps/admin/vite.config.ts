@@ -2,9 +2,8 @@
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import react from '@vitejs/plugin-react';
+import AutoImport from 'unplugin-auto-import/vite';
 import { defineConfig } from 'vite';
-
-
 
 export default defineConfig({
   root: __dirname,
@@ -20,7 +19,24 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  plugins: [react(), nxViteTsPaths(), TanStackRouterVite()],
+  plugins: [
+    AutoImport({
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+      ],
+      dts: './types/auto-imports.d.ts',
+      imports: [
+        'react',
+        {
+          from: '@tanstack/react-query',
+          imports: ['useQueryClient', 'useQuery', 'useMutation'],
+        },
+      ],
+    }),
+    react(),
+    nxViteTsPaths(),
+    TanStackRouterVite(),
+  ],
 
   // Uncomment this if you are using workers.
   // worker: {
