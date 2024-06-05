@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@ag-grid-community/styles':
+    specifier: ^31.3.2
+    version: 31.3.2
   '@radix-ui/react-slot':
     specifier: ^1.0.2
     version: 1.0.2(@types/react@18.3.1)(react@18.3.1)
@@ -228,6 +231,10 @@ devDependencies:
     version: 1.6.0(@types/node@18.16.9)(@vitest/ui@1.6.0)(jsdom@22.1.0)(sass@1.77.4)
 
 packages:
+
+  /@ag-grid-community/styles@31.3.2:
+    resolution: {integrity: sha512-FP1FxUGKHCUdu081eptYg1g5FdDHjluTt2w6Jm5/KmC2XISUzdhhxJATsNM4Nu0h6fwxhQICsJl0xsTvXG/rxw==}
+    dev: false
 
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
