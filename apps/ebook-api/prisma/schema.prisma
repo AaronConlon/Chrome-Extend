@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model EBook {
+  id            Int            @id @default(autoincrement())
+  title         String
+  author        String
+  description   String
+  cover         String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  downloadLinks DownloadLink[]
+  tags          EBookTag[]
+}
+
+model DownloadLink {
+  id          Int    @id @default(autoincrement())
+  url         String
+  description String
+  EBook       EBook? @relation(fields: [eBookId], references: [id])
+  eBookId     Int?
+}
+
+model Tag {
+  id        Int        @id @default(autoincrement())
+  name      String
+  createdAt DateTime   @default(now())
+  ebooks    EBookTag[]
+}
+
+model EBookTag {
+  id      Int   @id @default(autoincrement())
+  ebookId Int
+  tagId   Int
+  EBook   EBook @relation(fields: [ebookId], references: [id])
+  Tag     Tag   @relation(fields: [tagId], references: [id])
+}

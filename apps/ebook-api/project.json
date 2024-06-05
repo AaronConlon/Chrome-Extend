@@ -1,0 +1,24 @@
+{
+  "name": "ebook-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/ebook-api/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "ebook-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "ebook-api:build:development"
+        },
+        "production": {
+          "buildTarget": "ebook-api:build:production"
+        }
+      }
+    }
+  }
+}

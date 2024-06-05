@@ -6,6 +6,7 @@ export interface InputWithLabelProps {
   id: string;
   inputProps?: InputProps;
   labelName: string;
+  labelClass?: string;
 }
 
 export function InputWithLabel({
@@ -13,10 +14,13 @@ export function InputWithLabel({
   rootClass,
   inputProps,
   labelName,
+  labelClass,
 }: InputWithLabelProps) {
   return (
     <div className={cn('grid w-full items-center gap-1.5', rootClass)}>
-      <label htmlFor={id}>{labelName}</label>
+      <label htmlFor={id} className={cn('font-bold', labelClass)}>
+        {labelName}
+      </label>
       <Input id={id} {...inputProps} />
     </div>
   );

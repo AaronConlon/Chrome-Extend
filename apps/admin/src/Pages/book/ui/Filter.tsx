@@ -1,16 +1,11 @@
-import { Button, Input } from '@chrome-extend/shared-ui';
-import { PiNotebookThin } from 'react-icons/pi';
+import { Input } from '@chrome-extend/shared-ui';
+import CreateEBook from './Create';
 
 export function Filter() {
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <Input placeholder="search..." className="w-48" prefixIcon="🔍" />
-        <Button>
-          <PiNotebookThin className="w-4 h-4 mr-2" />
-          创建
-        </Button>
-      </div>
+    <div className="flex items-center justify-between mb-4">
+      <Input placeholder="search..." className="w-48" prefixIcon="🔍" />
+      <CreateEBook />
     </div>
   );
 }
