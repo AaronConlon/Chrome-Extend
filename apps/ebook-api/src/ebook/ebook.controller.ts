@@ -7,8 +7,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateEbookDto } from './dto/create-ebook.dto';
+import { QueryEbookDto } from './dto/find-ebook.dto';
 import { UpdateEbookDto } from './dto/update-ebook.dto';
 import { EbookService } from './ebook.service';
 
@@ -22,8 +24,8 @@ export class EbookController {
   }
 
   @Get()
-  findAll() {
-    return this.ebookService.findAll();
+  findAll(@Query() pagination: QueryEbookDto) {
+    return this.ebookService.findAll(pagination);
   }
 
   @Get(':id')

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateEbookDto } from './dto/create-ebook.dto';
+import { QueryEbookDto } from './dto/find-ebook.dto';
 import { UpdateEbookDto } from './dto/update-ebook.dto';
 
 @Injectable()
@@ -9,35 +10,86 @@ export class EbookService {
 
   async create(createEbookDto: CreateEbookDto) {
     console.log('create ebook dto:', createEbookDto);
-    const { title, author, description, cover, downloadLinks, tags } =
-      createEbookDto;
-    const data: any = {
-      title,
-      author,
-      description,
-      cover,
-      downloadLinks: {
-        create: downloadLinks.map((link) => ({
-          url: link.url,
-          description: link.description,
-        })),
-      },
-      tags: {
-        connectOrCreate: tags?.map((name) => ({
-          Tag: {
-            connectOrCreate: {
-              where: { name },
-              create: { name },
-            },
+    const prisma = this.prisma;
+    // 从请求体中获取数据
+    const { tags = [], downloadLinks, ...ebookData } = createEbookDto;
+
+    // 创建 ebook
+    const ebook = await prisma.eBook.create({ data: ebookData });
+
+    downloadLinks.map((downloadLink) => {
+      prisma.downloadLink
+        .create({
+          data: {
+            ...downloadLink,
+            eBookId: ebook.id,
           },
-        })),
-      },
-    };
-    return this.prisma.eBook.create({ data });
+        })
+        .catch((e) => {
+          console.error('create download link error:', e);
+        });
+    });
+    // 处理 tags
+    tags.forEach(async (name) => {
+      try {
+        const tag = await prisma.tag.upsert({
+          where: { name },
+          update: { name },
+          create: { name },
+        });
+
+        console.log('tag:', tag);
+        console.log('ebook id:', ebook.id);
+
+        // 创建 eBookTag
+        const resp = await prisma.eBookTag.create({
+          data: {
+            ebookId: ebook.id,
+            tagId: tag.id,
+          },
+        });
+        console.log('new ebook tab:', resp);
+      } catch (error) {
+        console.log('create tag error:', error);
+      }
+    });
   }
 
-  findAll() {
-    return `This action returns all ebook`;
+  async findAll(pagination: QueryEbookDto) {
+    // resolver body and query params
+    const limit = +pagination.limit;
+    const page = +pagination.page;
+    const { query } = pagination;
+    const [total, items] = await Promise.all([
+      this.prisma.eBook.count(),
+      this.prisma.eBook.findMany({
+        take: limit,
+        skip: (page - 1) * limit,
+        where: {
+          OR: [
+            {
+              title: {
+                contains: query,
+              },
+            },
+            {
+              author: {
+                contains: query,
+              },
+            },
+            {
+              description: {
+                contains: query,
+              },
+            },
+          ],
+        },
+      }),
+    ]);
+    return {
+      total,
+      items,
+    };
   }
 
   findOne(id: number) {

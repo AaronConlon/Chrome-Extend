@@ -29,13 +29,13 @@ model DownloadLink {
   id          Int    @id @default(autoincrement())
   url         String
   description String
-  EBook       EBook? @relation(fields: [eBookId], references: [id])
   eBookId     Int?
+  EBook       EBook? @relation(fields: [eBookId], references: [id])
 }
 
 model Tag {
   id        Int        @id @default(autoincrement())
-  name      String
+  name      String     @unique
   createdAt DateTime   @default(now())
   ebooks    EBookTag[]
 }
