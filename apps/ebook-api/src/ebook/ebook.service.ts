@@ -56,44 +56,58 @@ export class EbookService {
   }
 
   async findAll(pagination: QueryEbookDto) {
-    // resolver body and query params
-    const limit = +pagination.limit;
-    const page = +pagination.page;
-    const { query } = pagination;
-    const [total, items] = await Promise.all([
-      this.prisma.eBook.count(),
-      this.prisma.eBook.findMany({
-        take: limit,
-        skip: (page - 1) * limit,
-        where: {
-          OR: [
-            {
-              title: {
-                contains: query,
-              },
+    const {
+      query = '',
+      limit,
+      page,
+      orderBy = 'title',
+      orderType = 'asc',
+    } = pagination;
+    const result = await this.prisma.eBook.findMany({
+      skip: (page - 1) * limit,
+      where: {
+        OR: [
+          {
+            title: {
+              contains: query,
             },
-            {
-              author: {
-                contains: query,
-              },
+          },
+          {
+            author: {
+              contains: query,
             },
-            {
-              description: {
-                contains: query,
-              },
+          },
+          {
+            description: {
+              contains: query,
             },
-          ],
-        },
-      }),
-    ]);
+          },
+        ],
+      },
+      orderBy: {
+        [orderBy]: orderType,
+      },
+      include: {
+        tags: true,
+        downloadLinks: true,
+      },
+    });
     return {
-      total,
-      items,
+      total: result.length,
+      items: result.slice(0, limit),
     };
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} ebook`;
+    return this.prisma.eBook.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        tags: true,
+        downloadLinks: true,
+      },
+    });
   }
 
   update(id: number, updateEbookDto: UpdateEbookDto) {

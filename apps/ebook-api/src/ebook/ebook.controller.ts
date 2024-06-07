@@ -9,6 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ParsePaginationPipe } from '../shared/pipe';
 import { CreateEbookDto } from './dto/create-ebook.dto';
 import { QueryEbookDto } from './dto/find-ebook.dto';
 import { UpdateEbookDto } from './dto/update-ebook.dto';
@@ -19,18 +20,20 @@ export class EbookController {
   constructor(private readonly ebookService: EbookService) {}
 
   @Post()
-  create(@Body() createEbookDto: CreateEbookDto) {
-    return this.ebookService.create(createEbookDto);
+  async create(@Body() createEbookDto: CreateEbookDto) {
+    await this.ebookService.create(createEbookDto);
+    return { message: 'Ebook created successfully' };
   }
 
   @Get()
-  findAll(@Query() pagination: QueryEbookDto) {
+  findAll(@Query(new ParsePaginationPipe()) pagination: QueryEbookDto) {
     return this.ebookService.findAll(pagination);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const ebook = this.ebookService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const ebook = await this.ebookService.findOne(+id);
+    console.log('ebook:', id, ebook);
     if (!ebook) {
       throw new NotFoundException(`EBook with ID ${id} not found`);
     }
