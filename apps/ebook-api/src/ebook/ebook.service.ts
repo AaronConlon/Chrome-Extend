@@ -88,7 +88,11 @@ export class EbookService {
         [orderBy]: orderType,
       },
       include: {
-        tags: true,
+        tags: {
+          include: {
+            Tag: true,
+          },
+        },
         downloadLinks: true,
       },
     });

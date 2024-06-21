@@ -21,7 +21,8 @@
       "@chrome-extend/orders": ["libs/orders/src/index.ts"],
       "@chrome-extend/products": ["libs/products/src/index.ts"],
       "@chrome-extend/shared-ui": ["libs/shared/ui/src/index.ts"],
-      "@chrome-extend/utils": ["libs/utils/src/index.ts"]
+      "@chrome-extend/utils": ["libs/utils/src/index.ts"],
+      "@chrome-extend/webRequest": ["libs/shared/webRequest/src/index.ts"]
     },
     "strict": true
   },

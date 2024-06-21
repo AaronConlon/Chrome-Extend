@@ -45,7 +45,7 @@ const DialogContent = React.forwardRef<
       {children}
       <DialogPrimitive.Close
         asChild
-        className="absolute right-3 top-3 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+        className="absolute right-3 top-3 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
       >
         <IoIosClose className="w-5 h-5 cursor-pointer" />
       </DialogPrimitive.Close>
@@ -121,3 +121,4 @@ export {
   DialogTitle,
   DialogTrigger,
 };
+

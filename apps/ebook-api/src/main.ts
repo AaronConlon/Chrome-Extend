@@ -9,7 +9,10 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    cors: false,
+    cors: {
+      origin: '*', // Allow any origin
+      credentials: true, // Allow cookies
+    },
   });
   app.useGlobalPipes(new ValidationPipe());
   const globalPrefix = 'api';
