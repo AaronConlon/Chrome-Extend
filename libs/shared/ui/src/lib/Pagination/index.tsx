@@ -12,6 +12,7 @@ export interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
   showTotal?: boolean;
   maxRenderCount?: number;
   limitOptions?: number[];
+  slotFooter?: React.ReactNode;
 }
 
 const Pagination = React.forwardRef<HTMLInputElement, PaginationProps>(
@@ -24,6 +25,7 @@ const Pagination = React.forwardRef<HTMLInputElement, PaginationProps>(
       page,
       showTotal,
       limitOptions = [1, 2, 5, 10],
+      slotFooter,
       ...props
     },
     ref
@@ -148,7 +150,7 @@ const Pagination = React.forwardRef<HTMLInputElement, PaginationProps>(
           props?.className
         )}
       >
-        <div className="mr-auto">{currentPageOptionLength}</div>
+        {slotFooter && <div className="flex-grow">{slotFooter}</div>}
         {/* total */}
         {showTotal && (
           <div className="text-sm text-gray-500">

@@ -28,7 +28,6 @@ function DownloadLinksComponent(params: ICellRendererParams) {
 }
 
 function TagsComponent(params: ICellRendererParams) {
-  console.log(params.value);
   return params.value
     .map(({ Tag }: { Tag: IEBookTag }) => Tag.name)
     .map((name: string) => (
@@ -41,8 +40,6 @@ function TagsComponent(params: ICellRendererParams) {
 export default function () {
   // Row Data: The data to be displayed.
   const route = useRouteContext({ from: '/book/' });
-
-  console.log(route);
 
   // Column Definitions: Defines the columns to be displayed.
   const colDefs: ColDef<IEbook>[] = [
@@ -58,6 +55,7 @@ export default function () {
       ...commonColDef.downloadLinks,
       cellRenderer: DownloadLinksComponent,
     },
+    commonColDef.operation,
   ];
 
   const navigate = useNavigate({
@@ -77,12 +75,17 @@ export default function () {
     <div>
       <div
         className="relative ag-theme-quartz" // applying the grid theme
-        style={{ height: 300, maxWidth: 1920 }} // the grid will fill the size of the parent container
+        style={{
+          height: 'calc(100vh - 200px)',
+          maxHeight: 960,
+          maxWidth: 1920,
+        }} // the grid will fill the size of the parent container
       >
         <AgGridReact
           rowData={route.data.items}
           columnDefs={colDefs}
           overlayNoRowsTemplate="没有匹配的数据"
+          suppressCellFocus={true}
         />
         <Pagination
           className="absolute inset-x-0 bottom-0 rounded-none"

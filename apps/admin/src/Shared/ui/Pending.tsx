@@ -1,3 +1,7 @@
 export default function Pending() {
-  return <div>pending</div>;
+  return (
+    <div className="flex items-center justify-center py-32 text-gray-700">
+      pending...
+    </div>
+  );
 }
