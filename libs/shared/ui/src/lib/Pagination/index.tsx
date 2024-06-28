@@ -35,13 +35,17 @@ const Pagination = React.forwardRef<HTMLInputElement, PaginationProps>(
       totalPage,
       page + maxRenderCount - 1
     );
-    const pageOptionNumbers = React.useRef(
-      Array.from(
-        {
-          length: currentPageOptionLength,
-        },
-        (_, i) => i + page
-      )
+
+    
+    const pageOptionNumbers = React.useMemo(
+      () =>
+        Array.from(
+          {
+            length: currentPageOptionLength,
+          },
+          (_, i) => i + page
+        ),
+      [currentPageOptionLength, page]
     );
     // items
     const renderPageNumbers = () => {
@@ -49,7 +53,7 @@ const Pagination = React.forwardRef<HTMLInputElement, PaginationProps>(
         <Button variant={'ghost'} size={'sm'} disabled={page === 1}>
           <GrLinkPrevious />
         </Button>,
-        ...pageOptionNumbers.current.map((number) => (
+        ...pageOptionNumbers.map((number) => (
           <Button
             className={cn(
               number === page && 'bg-gray-100',

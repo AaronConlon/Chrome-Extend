@@ -32,3 +32,11 @@ export interface IEbook {
 }
 
 export type TEbookPageResult = IPageResult<IEbook>;
+
+export interface ICreateEBook extends IEbook {
+  tags: string[];
+  downloadLinks: {
+    url: string;
+    description: string;
+  }[];
+}

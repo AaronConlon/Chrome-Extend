@@ -8,7 +8,9 @@ export default function FieldInfo({
   return (
     <>
       {field.state.meta.touchedErrors ? (
-        <em>{field.state.meta.touchedErrors}</em>
+        <em className="text-sm text-red-400 truncate">
+          {field.state.meta.touchedErrors}
+        </em>
       ) : null}
       {field.state.meta.isValidating ? 'Validating...' : null}
     </>

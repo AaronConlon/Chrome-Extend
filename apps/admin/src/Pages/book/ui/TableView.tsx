@@ -1,6 +1,6 @@
 import '@ag-grid-community/styles/ag-grid.css';
 import '@ag-grid-community/styles/ag-theme-quartz.css';
-import { Button, Pagination } from '@chrome-extend/shared-ui';
+import { Button } from '@chrome-extend/shared-ui';
 import { useNavigate, useRouteContext } from '@tanstack/react-router';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community'; // Column Definition
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
@@ -40,6 +40,7 @@ function TagsComponent(params: ICellRendererParams) {
 export default function () {
   // Row Data: The data to be displayed.
   const route = useRouteContext({ from: '/book/' });
+  console.log(route);
 
   // Column Definitions: Defines the columns to be displayed.
   const colDefs: ColDef<IEbook>[] = [
@@ -87,14 +88,14 @@ export default function () {
           overlayNoRowsTemplate="没有匹配的数据"
           suppressCellFocus={true}
         />
-        <Pagination
+        {/* <Pagination
           className="absolute inset-x-0 bottom-0 rounded-none"
           onPaginationChange={onPaginationChange}
           total={route.data.total}
           limit={route.config.params.limit}
           page={route.config.params.page}
           showTotal
-        />
+        /> */}
       </div>
     </div>
   );

@@ -16,7 +16,6 @@ export const Route = createFileRoute('/book/')({
   validateSearch: schema,
   beforeLoad({ context: { queryClient }, search }) {
     // 匹配此路由时，调用此函数
-    console.log(search);
     const { query, limit, page } = search;
     return queryClient.ensureQueryData(
       ebookPageQO({
