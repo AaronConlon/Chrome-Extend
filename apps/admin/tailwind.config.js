@@ -36,5 +36,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-multi')],
+  plugins: [require('tailwindcss-multi'), require('tailwindcss-animated')],
 };
