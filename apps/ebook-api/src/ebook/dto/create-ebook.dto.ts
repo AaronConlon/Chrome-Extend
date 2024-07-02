@@ -1,5 +1,13 @@
 import { DownloadLink } from '@prisma/client';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+
+
 
 export class CreateEbookDto {
   @IsString({
@@ -37,10 +45,7 @@ export class CreateEbookDto {
   @IsArray({
     message: 'Download links must be an array',
   })
-  @IsString({
-    each: true,
-    message: 'Each download link and url must be a string',
-  })
+  @ArrayNotEmpty({ message: 'Download links must not be empty' })
   downloadLinks: DownloadLink[];
 
   @IsArray({

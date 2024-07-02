@@ -26,6 +26,7 @@ export interface IEbook {
   id: number;
   title: string;
   author: string;
+  cover: string;
   description: string;
   tags: IEBookTag[];
   downloadLinks: IDownloadLink[];
@@ -33,7 +34,7 @@ export interface IEbook {
 
 export type TEbookPageResult = IPageResult<IEbook>;
 
-export interface ICreateEBook extends IEbook {
+export interface ICreateEBook extends Omit<IEbook, 'id'> {
   tags: string[];
   downloadLinks: {
     url: string;

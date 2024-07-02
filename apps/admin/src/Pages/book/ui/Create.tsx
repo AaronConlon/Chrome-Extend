@@ -17,7 +17,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { DeleteIcon, Trash2 } from 'lucide-react';
 import { PiNotebookThin, PiPlus } from 'react-icons/pi';
 import { z } from 'zod';
-import { IDownloadLink, mutationOPtions } from '../../../Shared/api/ebook';
+import { ICreateEBook, useCreateEBookMT } from '../../../Shared/api/ebook';
 import { getAllTagQO } from '../../../Shared/api/tag';
 import { regExpRecord } from '../../../Shared/config';
 import FieldInfo from '../../../Shared/ui/FieldInfo';
@@ -27,7 +27,7 @@ export default function CreateEBook() {
   const { data } = useQuery(getAllTagQO());
   const [open, setOpen] = useState(false);
 
-  const createMT = useMutation(mutationOPtions.create);
+  const createMT = useCreateEBookMT();
 
   // 上传下载描述和链接
   const form = useForm({
@@ -35,14 +35,17 @@ export default function CreateEBook() {
       title: '书籍 A',
       author: '佚名',
       description: '这本书还行',
-      cover: '',
-      tags: [] as string[],
-      downloadLinks: [] as Omit<IDownloadLink, 'id'>[],
-    },
+      cover:
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIADgAJAMBIgACEQEDEQH/xAAbAAACAwEBAQAAAAAAAAAAAAAABwQFBgEDAv/EADEQAAEDAwMCBAUCBwAAAAAAAAECAwQABREGEiExQRNRYZEHInGBoTLBFBUzUrHR4f/EABgBAAIDAAAAAAAAAAAAAAAAAAEDAAIE/8QAHBEAAgIDAQEAAAAAAAAAAAAAAAECEQMhMjEE/9oADAMBAAIRAxEAPwBvqSsrJDqwMnioiJmf1fxSTnu2T29BUiW+mM0pxSVK68JGSepqBJWFOKeaK0KHyKUlGdpGM/UHIH2+4qlYpyo9nJhSk7jKTgnOG8/4FcjyTIKghx9O3rvGKjSFLCVusuvfqwRt9M5Hn0/1XkxNSFhvLilk43FPWrqIqWSmXkBTgaWFuKWQvqT6Civm3Z8FZPdf7CigaIcoHElwkbinGenFVV+ukGwQDNucxxpgKCRjJKiewHv7VVfEfUEzTumZEu3NKXJW+GUKAzs3E84/H3pRzpGr9V21uHeXWUxm1eIl1zaVnJxxt6jtzQUSvo77ZcYV/tiZ9qmLdjqJTuyQcg4OR2qof1LbYs5yM4++fCXsdeAy22ryPPr5EVW/CO3tWjT0i3vTErluvqdLZRsKU4A4/u6ZyK9J+jC7MeSmUlMOS54jiNh38nJAOcde+OKbjUdqRm+hzW4m/hjDPBzzRXIP9DGOhx+BRSzXDlCQ1Zq+5SdR3WzMrkuBuU42hpk54SogfKeMfX0qmt1xVGW9GnMllTZ+ZsHkbhyB9eDTJ1AzHavJwhKX5MhwZCeSBn/p+tYjUWjbjc7vHmW5xhCXUHxS8spwcq54BJ4P4q5CPbdQulSn2nVNulYU2scdcYpx2Sf/ADmyR5pI8RWUqI6Eg4JHtSa1NpmLYLUCzOkPyVfKhBQEgKBGc+hzxWl+HV5etmnlR7i54akvlTbKxnYnA7jzOetCrYvJyNqAlSWSF9d37Cioem7gm6Q3pCFpWA8U5SOmEprtBjMbuKMDruJdHVzv4O13F9wqVsVHZV03gDBH3OR0HPlWVan65ZcBTZrwpscbVWnn3zx7UUVLDRTXe06wnXQyVWq9yApW0BdvKAlBz5cd+47c1yFaNSx2H2VaZvqUOnCktx1kLAVuTkEcY+X29aKKARu/BeJdImk30XmJKjSVTVqCJKClW3ajBwe3WiiioQ//2Q==',
+      tags: [],
+      downloadLinks: [],
+    } as ICreateEBook,
     onSubmit: async ({ value }) => {
       // 提交表单
       console.log(value);
-      createMT.mutateAsync(value);
+      await createMT.mutateAsync(value);
+      // show success message and close dialog
+      setOpen(false);
     },
     validatorAdapter: zodValidator,
   });
@@ -125,31 +128,59 @@ export default function CreateEBook() {
             </div>
           </div>
 
-          <div className="mb-4">
-            <form.Field
-              name="description"
-              validators={{
-                onChange: z
-                  .string()
-                  .min(1, '标题不能为空')
-                  .max(100, '描述不能超过 100 字'),
-                onChangeAsyncDebounceMs: 500,
-              }}
-              children={(field) => (
-                <>
-                  <Textarea
-                    labelName="简介"
-                    placeholder="简介"
-                    id={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    rows={3}
-                  />
-                  <FieldInfo field={field} />
-                </>
-              )}
-            />
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <form.Field
+                name="description"
+                validators={{
+                  onChange: z
+                    .string()
+                    .min(1, '标题不能为空')
+                    .max(100, '描述不能超过 100 字'),
+                  onChangeAsyncDebounceMs: 500,
+                }}
+                children={(field) => (
+                  <>
+                    <Textarea
+                      labelName="简介"
+                      placeholder="简介"
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      rows={3}
+                    />
+                    <FieldInfo field={field} />
+                  </>
+                )}
+              />
+            </div>
+            <div className="pr-2">
+              <form.Field
+                name="cover"
+                validators={{
+                  onChange: z
+                    .string()
+                    .min(1, '封面地址不能为空')
+                    .max(1024 * 32, '封面地址不能超过 1024 字'),
+                }}
+                children={(field) => (
+                  <>
+                    <InputWithLabel
+                      id={field.name}
+                      labelName="封面地址"
+                      inputProps={{
+                        placeholder: '封面URL',
+                        value: field.state.value,
+                        onBlur: field.handleBlur,
+                        onChange: (e) => field.handleChange(e.target.value),
+                      }}
+                    />
+                    <FieldInfo field={field} />
+                  </>
+                )}
+              />
+            </div>
           </div>
           {/* tags */}
           <div className="mb-4">

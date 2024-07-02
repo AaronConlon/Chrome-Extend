@@ -1,7 +1,7 @@
 import '@ag-grid-community/styles/ag-grid.css';
 import '@ag-grid-community/styles/ag-theme-quartz.css';
-import { Button } from '@chrome-extend/shared-ui';
-import { useNavigate, useRouteContext } from '@tanstack/react-router';
+import { Button, Pagination } from '@chrome-extend/shared-ui';
+import { Link, useNavigate, useRouteContext } from '@tanstack/react-router';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community'; // Column Definition
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { IoCloudDownloadOutline } from 'react-icons/io5';
@@ -44,10 +44,35 @@ export default function () {
 
   // Column Definitions: Defines the columns to be displayed.
   const colDefs: ColDef<IEbook>[] = [
-    commonColDef.id,
-    commonColDef.title,
-    commonColDef.author,
-    commonColDef.description,
+    {
+      field: 'cover',
+      headerName: '封面',
+      width: 350,
+      cellRenderer: (params: ICellRendererParams) => (
+        <img
+          src={params.value}
+          alt={params.data.title}
+          className="object-cover w-full h-full rounded-md"
+        />
+      ),
+    },
+    {
+      ...commonColDef.title,
+      flex: 1,
+      cellRenderer: (params: ICellRendererParams) => (
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between pt-2">
+            <Link to={`/book/${params.data.id}`} className="text-lg font-bold">
+              《{params.data.title}》
+            </Link>
+            <div className="text-sm text-gray-500">{params.data.author}</div>
+          </div>
+          <div className="w-full text-sm text-gray-500 line-clamp-2 text-wrap">
+            {params.data.description}
+          </div>
+        </div>
+      ),
+    },
     {
       ...commonColDef.tags,
       cellRenderer: TagsComponent,
@@ -87,15 +112,16 @@ export default function () {
           columnDefs={colDefs}
           overlayNoRowsTemplate="没有匹配的数据"
           suppressCellFocus={true}
+          rowHeight={100}
         />
-        {/* <Pagination
+        <Pagination
           className="absolute inset-x-0 bottom-0 rounded-none"
           onPaginationChange={onPaginationChange}
           total={route.data.total}
           limit={route.config.params.limit}
           page={route.config.params.page}
           showTotal
-        /> */}
+        />
       </div>
     </div>
   );
