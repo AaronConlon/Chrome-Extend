@@ -5,14 +5,16 @@ export const ebookPageQO = (params: IEbookPageParams) =>
   queryOptions({
     queryKey: ['ebookPage', params],
     queryFn: () => ebookApi.page(params),
+    meta: {
+      invalidates: [['ebookPage']],
+      awaits: [['ebookPage']],
+    },
   });
 
-export const useCreateEBookMT = () =>
-  useMutation({
+export const useCreateEBookMT = () => {
+  return useMutation({
     mutationFn: (formValue: ICreateEBook) => {
       return ebookApi.create(formValue);
     },
-    onError(error, variables, context) {
-      console.log(error.message);
-    },
   });
+};

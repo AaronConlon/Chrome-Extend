@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@chrome-extend/utils';
+import { RotateCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { IoIosClose } from 'react-icons/io';
@@ -18,6 +19,7 @@ export interface IDialogProps {
   footer?: React.ReactNode;
   outsideClose?: boolean;
   container?: Element | DocumentFragment;
+  loading?: boolean;
 }
 
 export const Dialog = ({
@@ -32,6 +34,7 @@ export const Dialog = ({
   onConfirm,
   outsideClose = true,
   container,
+  loading = false,
 }: IDialogProps) => {
   const [zIndex, setZIndex] = useState<number>(globalThis.__Z_INDEX__ || 50);
   useEffect(() => {
@@ -88,7 +91,15 @@ export const Dialog = ({
             <Button variant={'secondary'} onClick={onClose}>
               取消
             </Button>
-            <Button onClick={onConfirm}>确定</Button>
+            <Button onClick={onConfirm} disabled={loading}>
+              {loading && (
+                <RotateCw
+                  className="animate-spin animate-duration-[1000ms] mr-1"
+                  size={14}
+                />
+              )}
+              确定
+            </Button>
           </div>
         ) : (
           footer

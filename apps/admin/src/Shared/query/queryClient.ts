@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
           // or nothing if no meta is provided
           mutation.meta?.invalidates?.some((queryKey) =>
             matchQuery({ queryKey }, query)
-          ) ?? true,
+          ) ?? false,
       });
       const awaits = mutation.meta?.awaits;
       if (Array.isArray(awaits)) {

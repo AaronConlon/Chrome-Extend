@@ -68,6 +68,7 @@ export default function CreateEBook() {
           form.handleSubmit();
         }}
         title="创建电子书"
+        loading={createMT.isPending}
       >
         <form
           onSubmit={(e) => {

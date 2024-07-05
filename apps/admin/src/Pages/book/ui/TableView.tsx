@@ -1,14 +1,16 @@
 import '@ag-grid-community/styles/ag-grid.css';
 import '@ag-grid-community/styles/ag-theme-quartz.css';
 import { Button, Pagination } from '@chrome-extend/shared-ui';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useRouteContext } from '@tanstack/react-router';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community'; // Column Definition
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { IoCloudDownloadOutline } from 'react-icons/io5';
-import type {
-  IDownloadLink,
-  IEBookTag,
-  IEbook,
+import {
+  ebookPageQO,
+  type IDownloadLink,
+  type IEBookTag,
+  type IEbook,
 } from '../../../Shared/api/ebook';
 import { commonColDef } from '../../../Shared/config';
 
@@ -41,6 +43,8 @@ export default function () {
   // Row Data: The data to be displayed.
   const route = useRouteContext({ from: '/book/' });
   console.log(route);
+
+  const { data } = useSuspenseQuery(ebookPageQO(route.config.params));
 
   // Column Definitions: Defines the columns to be displayed.
   const colDefs: ColDef<IEbook>[] = [
@@ -108,7 +112,7 @@ export default function () {
         }} // the grid will fill the size of the parent container
       >
         <AgGridReact
-          rowData={route.data.items}
+          rowData={data.data.items}
           columnDefs={colDefs}
           overlayNoRowsTemplate="没有匹配的数据"
           suppressCellFocus={true}
